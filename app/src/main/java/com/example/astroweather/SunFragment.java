@@ -47,9 +47,11 @@ public class SunFragment extends Fragment {
                              Bundle savedInstanceState) {
         // przypisujemy layout do fragmentu
         View view;
-        //if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
              view = inflater.inflate(R.layout.sun_fragment_layout, container, false);
-      //  }
+        }else{
+            view = inflater.inflate(R.layout.sun_fragment_layout_land, container, false);
+        }
 
 
        if (sunriseTime==null && sunsetTime==null && sunsetAzimuth==null && sunriseAzimuth==null && twillightMorning==null && twillightMorning==null){

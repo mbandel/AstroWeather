@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/day_background"
+    android:background="@drawable/moon_background"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".5"
+        android:layout_weight=".2"
         android:orientation="vertical"
         >
 
@@ -17,9 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:textSize="30dp"
+            android:textSize="24dp"
             android:gravity="center"
-            android:text="Słońce" />
+            android:text="Księżyc" />
 
     </LinearLayout>
 
@@ -27,80 +28,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
-        android:padding="10dp"
+        android:layout_weight="1"
+        android:padding="5dp"
         android:orientation="horizontal">
 
 
         <TableLayout
             android:id="@+id/tableLayout1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp" >
-
-                <TextView
-                    android:id="@+id/tvTitle0"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:text="" />
-
-                <TextView
-                    android:id="@+id/tvTitle1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:text="czas" />
-
-                <TextView
-                    android:id="@+id/tvTitle2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:text="azymut" />
-
-
-            </TableRow>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
             <TableRow
                 android:id="@+id/tableRow2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp" >
-
+                android:padding="2dp" >
 
                 <TextView
-                    android:id="@+id/tvSunrise"
+                    android:id="@+id/tvMoonrise"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
+                    android:textSize="20dp"
                     android:text="wschód" />
 
                 <TextView
-                    android:id="@+id/tvSunrisetTime"
+                    android:id="@+id/tvMoonriseTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20dp"
                     android:text="00:00" />
-
-                <TextView
-                    android:id="@+id/tvSunriseAzimuth"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="20dp"
-                    android:text="0" />
-
             </TableRow>
 
 
@@ -108,71 +66,97 @@
                 android:id="@+id/tableRow3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp" >
+                android:padding="2dp" >
 
                 <TextView
-                    android:id="@+id/tvSunset"
+                    android:id="@+id/tvMoonset"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
+                    android:textSize="20dp"
                     android:text="zachód" />
 
                 <TextView
-                    android:id="@+id/tvSunsetTime"
+                    android:id="@+id/tvMoonsetTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20dp"
                     android:text="00:00" />
 
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/table1Row1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp" >
+
                 <TextView
-                    android:id="@+id/tvSunsetAzimuth"
+                    android:id="@+id/tvFullMoon"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20dp"
-                    android:text="0" />
+                    android:text="pełnia" />
+
+                <TextView
+                    android:id="@+id/tvFullMoonTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="20dp"
+                    android:text="00:00" />
 
             </TableRow>
-        </TableLayout>
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="10dp"
-        android:orientation="horizontal">
+            <TableRow
+                android:id="@+id/table1Row2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp" >
 
-        <TableLayout
-            android:id="@+id/tableLayout2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+                <TextView
+                    android:id="@+id/tvNewMoon"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="20dp"
+                    android:text="nów" />
+
+                <TextView
+                    android:id="@+id/tvNewMoonTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="20dp"
+                    android:text="00:00" />
+
+            </TableRow>
 
             <TableRow
                 android:id="@+id/table2Row1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp" >
+                android:padding="2dp" >
 
 
                 <TextView
-                    android:id="@+id/tvTwilligtEvening"
+                    android:id="@+id/tvMoonAge"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:text="zmierzch cywilny" />
-
-                <TextView
-                    android:id="@+id/tvTwilligtEveningTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
                     android:textSize="20dp"
-                    android:text="00:00" />
+                    android:text="dzień miesiąca synodycznego" />
+
+                <TextView
+                    android:id="@+id/tvMoonAgeTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:textSize="20dp"
+                    android:text="11" />
 
             </TableRow>
 
@@ -180,30 +164,26 @@
                 android:id="@+id/table2Row2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:padding="10dp" >
+                android:padding="2dp" >
                 <TextView
-                    android:id="@+id/tvTwilligtMorning"
+                    android:id="@+id/tvMoonIllumination"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:text="świt cywilny" />
+                    android:textSize="20dp"
+                    android:text="faza księżyca" />
 
                 <TextView
-                    android:id="@+id/tvTwilligtMorningTime"
+                    android:id="@+id/tvMoonIlluminationInfo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
+
                     android:textSize="20dp"
-                    android:text="00:00" />
+                    android:text="0%" />
             </TableRow>
 
-
         </TableLayout>
-
     </LinearLayout>
-
 </LinearLayout>
 

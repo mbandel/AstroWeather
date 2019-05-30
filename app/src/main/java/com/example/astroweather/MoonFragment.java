@@ -1,5 +1,6 @@
 package com.example.astroweather;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -52,8 +53,13 @@ public class MoonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // przypisujemy layout do fragmentu
-        View view = inflater.inflate(R.layout.moon_fragment_layout, container,
-                false);
+        View view;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            view = inflater.inflate(R.layout.moon_fragment_layout, container, false);
+        }else{
+            view = inflater.inflate(R.layout.moon_fragment_layout_land, container, false);
+        }
+
 
         AstroCalculator.Location loc = new AstroCalculator.Location(19.28, 51.47);
         Calendar mCalendar = new GregorianCalendar();
@@ -62,6 +68,7 @@ public class MoonFragment extends Fragment {
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE),
                 Calendar.getInstance().get(Calendar.SECOND), getOffset(), mTimeZone.inDaylightTime(new Date()));
         calculator = new AstroCalculator(datetime, loc);
+
 
         initTextViews(view);
         updateView();
