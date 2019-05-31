@@ -10,22 +10,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/settings"
-            android:src="@drawable/settings30"
-            android:layout_width="0dp"
-            android:layout_weight=".1"
-            android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tvTimer"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:text=""
-            android:textSize="22dp" />
+        <include
+            layout="@layout/toolbar"
+            android:id="@+id/toolbar"
+            />
+
+
 
 
     </LinearLayout>
