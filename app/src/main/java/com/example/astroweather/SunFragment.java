@@ -34,8 +34,9 @@ public class SunFragment extends Fragment {
     TextView sunriseAzimuth, sunsetAzimuth;
     TextView twillightEvening, twillightMorning;
     AstroCalculator calculator;
-    int refreshRate=5;
+
     Handler handler;
+    Runnable update;
 
     public static SunFragment newInstance() {
         SunFragment myFragment = new SunFragment();
@@ -58,20 +59,23 @@ public class SunFragment extends Fragment {
            initTextViews(view);
        }
 
-        AstroCalculator.Location loc = new AstroCalculator.Location(51.0, 19.0);
-        Calendar mCalendar = new GregorianCalendar();
-        TimeZone mTimeZone = mCalendar.getTimeZone();
-        AstroDateTime datetime = new AstroDateTime(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH) + 1,
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE),
-                Calendar.getInstance().get(Calendar.SECOND), getOffset(), mTimeZone.inDaylightTime(new Date()));
-        calculator = new AstroCalculator(datetime, loc);
+
 
         handler = new Handler();
-        Runnable update = new Runnable() {
+       update = new Runnable() {
             @Override
             public void run() {
+                AstroCalculator.Location loc = new AstroCalculator.Location(MainActivity.latitude, MainActivity.longitude);
+                Calendar mCalendar = new GregorianCalendar();
+                TimeZone mTimeZone = mCalendar.getTimeZone();
+                AstroDateTime datetime = new AstroDateTime(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE),
+                        Calendar.getInstance().get(Calendar.SECOND), getOffset(), mTimeZone.inDaylightTime(new Date()));
+                calculator = new AstroCalculator(datetime, loc);
+
                 updateView();
-                handler.postDelayed(this, refreshRate*1000);
+                makeToast("sun");
+                handler.postDelayed(this, MainActivity.refreshRate*1000);
             }
         };
 
@@ -134,4 +138,22 @@ public class SunFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Log.i("fragmnet", "onActivityCreated");
     }
+
+    public void makeToast(String msg){
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        handler.removeCallbacks(update);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        update.run();
+    }
+
+
 }

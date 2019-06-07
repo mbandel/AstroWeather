@@ -31,9 +31,11 @@ public class MoonFragment extends Fragment {
     AstroCalculator calculator;
     TextView moonriseTV, moonsetTV, fullMoonTV, newMoonTV, moonAgeTV, moonIlluminationTV;
     Handler handler;
+    Runnable update;
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("##.##");
+    AstroDateTime datetime;
 
 
     public interface OverviewFragmentActivityListener {
@@ -60,18 +62,28 @@ public class MoonFragment extends Fragment {
             view = inflater.inflate(R.layout.moon_fragment_layout_land, container, false);
         }
 
-
-        AstroCalculator.Location loc = new AstroCalculator.Location(19.28, 51.47);
-        Calendar mCalendar = new GregorianCalendar();
-        TimeZone mTimeZone = mCalendar.getTimeZone();
-        AstroDateTime datetime = new AstroDateTime(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH)+1,
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE),
-                Calendar.getInstance().get(Calendar.SECOND), getOffset(), mTimeZone.inDaylightTime(new Date()));
-        calculator = new AstroCalculator(datetime, loc);
-
-
         initTextViews(view);
-        updateView();
+
+        handler=new Handler();
+        update = new Runnable() {
+            @Override
+            public void run() {
+                AstroCalculator.Location loc = new AstroCalculator.Location(MainActivity.latitude, MainActivity.longitude);
+                Calendar mCalendar = new GregorianCalendar();
+                Log.d("calendar", mCalendar.toString());
+                TimeZone mTimeZone = mCalendar.getTimeZone();
+                AstroDateTime datetime = new AstroDateTime(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH)+1,
+                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE),
+                        Calendar.getInstance().get(Calendar.SECOND), getOffset(), mTimeZone.inDaylightTime(new Date()));
+                calculator = new AstroCalculator(datetime, loc);
+                updateView();
+
+
+                handler.postDelayed(this, MainActivity.refreshRate*1000);
+            }
+        };
+
+        update.run();
 
         return view;
     }
@@ -91,6 +103,7 @@ public class MoonFragment extends Fragment {
             Date moonriseDate = new Date(moonrise.getYear()-1900, moonrise.getMonth()-1, moonrise.getDay(), moonrise.getHour(), moonrise.getMinute(), moonrise.getSecond());
             moonriseTV.setText(timeFormat.format(moonriseDate));
 
+
             AstroDateTime moonset = calculator.getMoonInfo().getMoonset();
             Date moonsetDate = new Date(moonset.getYear()-1900, moonset.getMonth()-1, moonset.getDay(), moonset.getHour(), moonset.getMinute(), moonset.getSecond());
             moonsetTV.setText(timeFormat.format(moonsetDate));
@@ -103,6 +116,7 @@ public class MoonFragment extends Fragment {
             Date newMoonDate = new Date(newMoon.getYear()-1900, newMoon.getMonth()-1, newMoon.getDay(), newMoon.getHour(), newMoon.getMinute(), newMoon.getSecond());
             newMoonTV.setText(dateFormat.format(newMoonDate));
 
+            double moonAge = calculator.getMoonInfo().getAge();
             moonAgeTV.setText(decimalFormat.format(calculator.getMoonInfo().getAge())+"dni");
             moonIlluminationTV.setText(decimalFormat.format(calculator.getMoonInfo().getIllumination()*100)+"%");
 
@@ -127,5 +141,21 @@ public class MoonFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i("fragmnet", "onActivityCreated");
+    }
+
+    public void makeToast(String msg){
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        handler.removeCallbacks(update);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        update.run();
     }
 }

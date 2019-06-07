@@ -3,12 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/location"
-        android:title="Lokalizacja"
+        android:id="@+id/settingsItem"
+        android:title="ustawienia"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/refresh_rate"
-        android:title="Częstotliwość odświeżania"
-        app:showAsAction="never" />
 </menu>

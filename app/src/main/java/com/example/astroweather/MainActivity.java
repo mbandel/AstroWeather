@@ -1,5 +1,7 @@
 package com.example.astroweather;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.Image;
 import android.os.Handler;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,13 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    TextView tvTimer;
+    TextView tvTimer, tvLongitude, tvLatitude;
     Handler handler;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Fragment moonFragment, sunFragment;
-    ImageView settings;
     Toolbar toolbar;
+    Runnable time;
+    public static int refreshRate=15;
+    public static double latitude = 51.75;
+    public static double longitude = 19.46;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +50,21 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            settings=findViewById(R.id.settings);
             toolbar=findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+            tvLongitude=findViewById(R.id.tvLongitude);
+            tvLatitude=findViewById(R.id.tvLatitude);
+
+            Bundle bundle = getIntent().getExtras();
+
+            if(bundle != null) {
+                latitude = bundle.getDouble("latitude");
+                longitude =  bundle.getDouble("longitude");
+                refreshRate = bundle.getInt("refreshRate");
+            }
+
+            tvLatitude.setText(String.valueOf(latitude));
+            tvLongitude.setText(String.valueOf(longitude));
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 ViewPager viewPager = findViewById(R.id.viewPager);
@@ -64,12 +82,13 @@ public class MainActivity extends AppCompatActivity {
             handler = new Handler();
             tvTimer = findViewById(R.id.tvTimer);
 
-            Runnable time = new Runnable() {
+             time = new Runnable() {
                 @Override
                 public void run() {
                     GregorianCalendar calendar = new GregorianCalendar();
                     tvTimer.setText(dateFormat.format(calendar.getTime()));
                     //calendar.add(Calendar.SECOND, 1);
+                   // makeToast("zegar");
                     handler.postDelayed(this, 1000);
                 }
             };
@@ -81,6 +100,18 @@ public class MainActivity extends AppCompatActivity {
             Log.d("exception: ", e.toString());
         }
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        time.run();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        handler.removeCallbacks(time);
     }
 
 
@@ -101,6 +132,30 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settingsItem:
+                onSettingsItemClicked();
+                return false;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void makeToast(String msg){
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    public void onSettingsItemClicked(){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        intent.putExtra("longitude", longitude);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("refreshRate", refreshRate);
+        startActivity(intent);
+
     }
 
 }
