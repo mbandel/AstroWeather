@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
     Fragment moonFragment, sunFragment;
     Toolbar toolbar;
     Runnable time;
-    public static int refreshRate=15;
-    public static double latitude = 51.75;
-    public static double longitude = 19.46;
+    public static int refreshRate;
+    public static double latitude;
+    public static double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +50,41 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
+
+            //tablet i orientacja pionowa
+            if (isTablet(this.getApplicationContext()) && getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT){
+                setContentView(R.layout.tablet_layout);
+                sunFragment = SunFragment.newInstance();
+                moonFragment = MoonFragment.newInstance();
+                fragmentTransaction.replace(R.id.sun_fragment, sunFragment);
+                fragmentTransaction.replace(R.id.moon_fragment, moonFragment);
+                fragmentTransaction.commit();
+            }
+
+            //telefon i orientacja pozioma
+            else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && isTablet(this.getApplicationContext())==false) {
+                //setContentView(R.layout.activity_main);
+                ViewPager viewPager = findViewById(R.id.viewPager);
+                viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+
+                //orientacja pozioma telefon i tablet
+            }else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                // setContentView(R.layout.activity_main);
+                sunFragment = SunFragment.newInstance();
+                moonFragment = MoonFragment.newInstance();
+
+                fragmentTransaction.replace(R.id.sun_fragment, sunFragment);
+                fragmentTransaction.replace(R.id.moon_fragment, moonFragment);
+                fragmentTransaction.commit();
+            }
+
             toolbar=findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             tvLongitude=findViewById(R.id.tvLongitude);
             tvLatitude=findViewById(R.id.tvLatitude);
+            latitude = 51.75;
+            refreshRate=15;
+            longitude = 19.46;
 
             Bundle bundle = getIntent().getExtras();
 
@@ -66,17 +97,8 @@ public class MainActivity extends AppCompatActivity {
             tvLatitude.setText(String.valueOf(latitude));
             tvLongitude.setText(String.valueOf(longitude));
 
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                ViewPager viewPager = findViewById(R.id.viewPager);
-                viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-            } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                sunFragment = SunFragment.newInstance();
-                moonFragment = MoonFragment.newInstance();
 
-                fragmentTransaction.replace(R.id.sun_fragment, sunFragment);
-                fragmentTransaction.replace(R.id.moon_fragment, moonFragment);
-                fragmentTransaction.commit();
-            }
+
 
 
             handler = new Handler();
@@ -87,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     GregorianCalendar calendar = new GregorianCalendar();
                     tvTimer.setText(dateFormat.format(calendar.getTime()));
-                    //calendar.add(Calendar.SECOND, 1);
-                   // makeToast("zegar");
+                    //makeToast(dateFormat.format(calendar.getTime()));
                     handler.postDelayed(this, 1000);
                 }
             };
@@ -143,6 +164,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
     }
 
     public void makeToast(String msg){
